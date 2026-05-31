@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elevator Modernisation – Phoenix Elevator Parts</title>
+  <meta name="description" content="Upgrade your older elevator systems. Specializing in manual to automatic door upgrades, smart microprocessor controllers, and partial mechanical modernizations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Custom styling for the detailed modernization sections */
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .package-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(27, 125, 58, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    .package-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(27, 125, 58, 0.2);
+    }
+    .package-card-img {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .package-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    .package-card:hover .package-card-img img {
+      transform: scale(1.08);
+    }
+    .package-card-content {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .package-card-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+    .package-card-content p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+    .package-spec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .spec-tag {
+      font-size: 0.8rem;
+      background: rgba(27, 125, 58, 0.08);
+      color: var(--primary-color);
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-weight: 500;
+    }
+    .comparison-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: flex-start;
+      margin-top: 40px;
+    }
+    .comparison-col {
+      background: white;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .comparison-col h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .comparison-col.challenges h3 {
+      color: #c62828;
+    }
+    .comparison-col.solutions h3 {
+      color: var(--primary-color);
+    }
+    .comparison-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .comparison-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .comparison-item i {
+      margin-top: 4px;
+      font-size: 1rem;
+    }
+    .challenges .comparison-item i {
+      color: #c62828;
+    }
+    .solutions .comparison-item i {
+      color: var(--primary-color);
+    }
+    .comparison-item div h4 {
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      color: var(--text-dark);
+    }
+    .comparison-item div p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    @media (max-width: 992px) {
+      .package-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .comparison-section {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+    @media (max-width: 600px) {
+      .package-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Simulator Styling & Keyframe Animations */
+    .sim-tab-btn.active {
+      background: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+    }
+    .sim-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+    }
+    .sim-tab-btn.active:hover {
+      background: var(--primary-color) !important;
+    }
+    
+    @keyframes blink-led {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+    @keyframes move-wave {
+      0% { stroke-dashoffset: 100; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes spin-old-gear {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-old-gear-reverse {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+    @keyframes spin-new-gear {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .sim-grid {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+      }
+      .slider-wrapper {
+        height: 250px !important;
+      }
+      .before-layer, .after-layer {
+        padding: 15px !important;
+      }
+      .after-layer div {
+        width: 100% !important;
+        align-items: center !important;
+      }
+      .after-layer p, .before-layer p {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-info">
+      <span><i class="fas fa-phone"></i> <a href="tel:+919845181687">+91 98451 81687</a></span>
+      <span><i class="fas fa-envelope"></i> <a href="mailto:phoenixdoorsystem@gmail.com">phoenixdoorsystem@gmail.com</a> | <a href="mailto:info@phoenixelevatorparts.com">info@phoenixelevatorparts.com</a></span>
+      <span><i class="fas fa-map-marker-alt"></i> Horamavu, Bangalore</span>
+    </div>
+    <div class="top-socials">
+      <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo">
+        <img src="phonex_logg.png" alt="Phoenix Elevator Parts Logo">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li class="dropdown">
+            <a href="#" class="nav-link active">Products <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="passenger-elevators.html">Passenger Elevators</a></li>
+              <li><a href="home-lifts.html">Home Lifts</a></li>
+              <li><a href="hospital-elevators.html">Hospital Elevators</a></li>
+              <li><a href="goods-lift.html">Goods Lifts</a></li>
+              <li><a href="hydraulic-lifts.html">Hydraulic Lifts</a></li>
+              <li><a href="capsule-lifts.html">Capsule Lifts</a></li>
+              <li><a href="glass-door-lifts.html">Glass Door Lifts</a></li>
+              <li><a href="modernisation.html" class="active">Modernisation</a></li>
+              <li><a href="smart-lifts.html">IoT Smart Lifts</a></li>
+            </ul>
+          </li>
+          <li><a href="industries.html" class="nav-link">Industries Served</a></li>
+          <li><a href="quality-safety.html" class="nav-link">Quality & Safety</a></li>
+          <li><a href="services.html" class="nav-link">Services</a></li>
+          <li><a href="maintenance.html" class="nav-link">Maintenance (AMC)</a></li>
+          <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+          <li><a href="contact.html" class="nav-cta">Get Quote</a></li>
+        </ul>
+      </nav>
+      <div class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <h1>Elevator Modernisation</h1>
+    <div class="breadcrumbs">
+      <a href="index.html">Home</a> / <a href="index.html#products">Products</a> / <span>Modernisation</span>
+    </div>
+  </section>
+
+  <!-- Product Detail Section -->
+  <section>
+    <div class="product-hero">
+      <div class="product-hero-img">
+        <img src="images/manual_elevator_gate.png" alt="Vintage manual collapsible scissor-gate elevator door">
+        <div style="background: rgba(0,0,0,0.6); color: white; padding: 8px 15px; position: absolute; bottom: 0; width: 100%; font-size: 0.85rem; text-align: center;">
+          Typical Legacy System: Collapsible Manual Iron Gate
+        </div>
+      </div>
+      <div>
+        <div class="section-header" style="text-align: left; margin-bottom: 25px;">
+          <span class="tag">System Revamp & Upgrades</span>
+          <h2>Breathe New Life into Your Aging Lift System</h2>
+        </div>
+        <p>At Phoenix Elevator Parts, we specialize in complete and custom-tailored Elevator Modernisation. If your existing lift system is experiencing frequent breakdowns, rough rides, high energy bills, or is still using dangerous manual gates, our technical engineers can overhaul it to modern standards.</p>
+        <p style="margin-top: 15px;">Instead of going through the massive cost and structural disruption of installing an entirely new elevator system, we target the mechanical, electrical, and aesthetic cores. We replace obsolete controllers, install automatic sliding doors, and mount eco-friendly gearless motors, ensuring maximum safety, comfort, and compliance.</p>
+        
+        <div class="product-features-box" style="margin-top: 30px;">
+          <h4 style="font-size: 1.2rem; color: var(--primary-color); margin-bottom: 15px;">Modernisation Scope & Standards</h4>
+          <div class="product-spec-list">
+            <div class="product-spec-item"><i class="fas fa-bolt"></i> Energy Savings: Up to 40%</div>
+            <div class="product-spec-item"><i class="fas fa-arrows-alt-v"></i> Accurate Leveling: +/- 5mm</div>
+            <div class="product-spec-item"><i class="fas fa-users-gear"></i> Door Options: Manual to Auto</div>
+            <div class="product-spec-item"><i class="fas fa-shield-cat"></i> Safety: ARD & Light Curtains</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modernisation Modules Packages -->
+  <section style="background-color: var(--bg-light); border-top: 1px solid rgba(0,0,0,0.05);">
+    <div class="section-header">
+      <span class="tag">Modernisation Scope</span>
+      <h2>Our Core Modernisation Offerings</h2>
+      <p>Explore our specialized engineering modules designed to address common issues in old lifts.</p>
+    </div>
+    
+    <div class="package-grid">
+      <!-- Package 1: Door Upgrade -->
+      <div class="package-card">
+        <div class="package-card-img">
+          <img src="images/automatic_door_upgrade.png" alt="Sleek automatic stainless steel elevator doors">
+        </div>
+        <div class="package-card-content">
+          <h3>Manual to Auto Door Upgrade</h3>
+          <p>We replace unsafe collapsible manual gates or swing doors with modern, automatic sliding doors (telescopic or center-opening). This involves installing door headers, variable-frequency door operators, and modern cabin door panels, completely eliminating door-opening hazards.</p>
+          <div class="package-spec-tags">
+            <span class="spec-tag">Infrared Sensor Curtains</span>
+            <span class="spec-tag">Auto Reversing mechanism</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Package 2: Controller Upgrade -->
+      <div class="package-card">
+        <div class="package-card-img">
+          <img src="images/smart_controller_upgrade.png" alt="High-tech elevator microprocessor control panel board">
+        </div>
+        <div class="package-card-content">
+          <h3>Smart Controller & Drive Overhaul</h3>
+          <p>We replace obsolete electromagnetic relays with advanced microprocessor control panels integrated with VVVF drives. This ensures smooth acceleration, resolves leveling issues that cause tripping, and manages energy efficiency by entering stand-by mode when idle.</p>
+          <div class="package-spec-tags">
+            <span class="spec-tag">Microprocessor Logic</span>
+            <span class="spec-tag">VVVF Energy Saver</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Package 3: Partial Modernisation -->
+      <div class="package-card">
+        <div class="package-card-img">
+          <img src="images/gearless_traction_upgrade.png" alt="Modern green gearless PMSM elevator traction machine">
+        </div>
+        <div class="package-card-content">
+          <h3>Partial Modernisation (Core Upgrade)</h3>
+          <p>Perfect for building owners looking to optimize costs. We retain your durable structural steel cabin frame and vertical guide rails, but swap the worn-out gear machine, traction ropes, and brake systems for a brand-new PMSM gearless motor and updated safety brakes.</p>
+          <div class="package-spec-tags">
+            <span class="spec-tag">Gearless Traction Machine</span>
+            <span class="spec-tag">Retain Cabin Shell</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Modernisation Simulator -->
+  <section class="simulator-section" style="background: linear-gradient(135deg, var(--bg-dark), #102a1c); color: white; border-top: 1px solid rgba(255,255,255,0.05); padding: 80px 5%;">
+    <div class="section-header" style="margin-bottom: 50px;">
+      <span class="tag" style="border-color: rgba(255,255,255,0.3); color: var(--accent-color);">Interactive Simulator</span>
+      <h2 style="color: white;">See the Difference: Old vs Modernised</h2>
+      <p style="color: rgba(255,255,255,0.7);">Interact with the controls below to compare legacy systems with our state-of-the-art upgrades.</p>
+    </div>
+
+    <div class="sim-tabs-container" style="max-width: 1100px; margin: 0 auto;">
+      <!-- Tab Controls -->
+      <div class="sim-tabs" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; flex-wrap: wrap;">
+        <button class="sim-tab-btn active" data-sim="controller" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 12px 25px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-microchip"></i> Elevator Controller
+        </button>
+        <button class="sim-tab-btn" data-sim="motor" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 12px 25px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-motorcycle"></i> Traction Machine
+        </button>
+        <button class="sim-tab-btn" data-sim="cabin" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 12px 25px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-door-open"></i> Cabin & Doors
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Controller -->
+      <div class="sim-content active" id="sim-controller" style="display: block;">
+        <div class="sim-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch;">
+          <!-- Left: Old Controller -->
+          <div class="sim-box old-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,0,0,0.15); border-radius: 12px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="sim-badge" style="position: absolute; top: 15px; right: 15px; background: rgba(198,40,40,0.2); color: #ff5252; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">Legacy Relay Panel</div>
+            <div>
+              <h3 style="margin-bottom: 15px; color: #ff5252;"><i class="fas fa-plug-circle-exclamation"></i> Old Electro-Mechanical</h3>
+              <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 25px;">Relies on physical magnetic contacts and heavy copper coils. High mechanical wear and tear, high heat production, and prone to contact carbonization.</p>
+              
+              <!-- Animated Old Controller Panel -->
+              <div class="relay-panel-anim" style="background: #111; height: 160px; border-radius: 8px; border: 2px solid #333; position: relative; margin-bottom: 25px; padding: 15px; display: flex; flex-direction: column; justify-content: space-around;">
+                <div class="relay-row" style="display: flex; justify-content: space-around;">
+                  <div class="relay-switch old-relay-1" style="width: 25px; height: 35px; background: #444; border: 1px solid #666; border-radius: 2px; position: relative; transition: all 0.1s;"><div class="relay-spark" style="display: none; position: absolute; top: -5px; left: 5px; width: 15px; height: 15px; background: radial-gradient(circle, #fff, #52b3ff); border-radius: 50%; box-shadow: 0 0 10px #52b3ff;"></div></div>
+                  <div class="relay-switch old-relay-2" style="width: 25px; height: 35px; background: #444; border: 1px solid #666; border-radius: 2px; position: relative; transition: all 0.1s;"><div class="relay-spark" style="display: none; position: absolute; top: -5px; left: 5px; width: 15px; height: 15px; background: radial-gradient(circle, #fff, #52b3ff); border-radius: 50%; box-shadow: 0 0 10px #52b3ff;"></div></div>
+                  <div class="relay-switch old-relay-3" style="width: 25px; height: 35px; background: #444; border: 1px solid #666; border-radius: 2px; position: relative; transition: all 0.1s;"><div class="relay-spark" style="display: none; position: absolute; top: -5px; left: 5px; width: 15px; height: 15px; background: radial-gradient(circle, #fff, #52b3ff); border-radius: 50%; box-shadow: 0 0 10px #52b3ff;"></div></div>
+                  <div class="relay-switch old-relay-4" style="width: 25px; height: 35px; background: #444; border: 1px solid #666; border-radius: 2px; position: relative; transition: all 0.1s;"><div class="relay-spark" style="display: none; position: absolute; top: -5px; left: 5px; width: 15px; height: 15px; background: radial-gradient(circle, #fff, #52b3ff); border-radius: 50%; box-shadow: 0 0 10px #52b3ff;"></div></div>
+                </div>
+                <div style="text-align: center; color: #ff5252; font-size: 0.75rem; font-family: monospace;" class="relay-text-status">SYSTEM IDLE</div>
+              </div>
+            </div>
+            
+            <div class="sim-stats" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Power Efficiency</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #ff5252;"><i class="fas fa-gauge-high"></i> Very Low</div>
+              </div>
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Leveling Precision</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #ff5252;"><i class="fas fa-ruler-horizontal"></i> &plusmn;25mm (Erratic)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: New Controller -->
+          <div class="sim-box new-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(27,125,58,0.25); border-radius: 12px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="sim-badge" style="position: absolute; top: 15px; right: 15px; background: rgba(27,125,58,0.2); color: var(--primary-color); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">Phoenix Microprocessor</div>
+            <div>
+              <h3 style="margin-bottom: 15px; color: var(--primary-color);"><i class="fas fa-circle-check"></i> Smart VVVF Microprocessor</h3>
+              <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 25px;">Solid-state digital processor controller combined with a Variable Voltage Variable Frequency drive. Silent operation, minimal thermal radiation, smart fault diagnostics.</p>
+              
+              <!-- Animated New Controller Panel -->
+              <div class="digital-panel-anim" style="background: #111; height: 160px; border-radius: 8px; border: 2px solid var(--primary-color); position: relative; margin-bottom: 25px; padding: 15px; display: flex; flex-direction: column; justify-content: space-around; align-items: center;">
+                <div class="cpu-leds" style="display: flex; gap: 8px;">
+                  <div class="led-light green-led" style="width: 10px; height: 10px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: blink-led 0.6s infinite alternate;"></div>
+                  <div class="led-light green-led-slow" style="width: 10px; height: 10px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: blink-led 1.2s infinite alternate;"></div>
+                  <div class="led-light blue-led" style="width: 10px; height: 10px; background: #0088ff; border-radius: 50%; box-shadow: 0 0 8px #0088ff; animation: blink-led 0.4s infinite alternate;"></div>
+                </div>
+                <!-- Sleek Digital Waveform -->
+                <div class="wave-container" style="width: 90%; height: 40px; position: relative; overflow: hidden; display: flex; align-items: center;">
+                  <svg viewBox="0 0 100 20" style="width: 100%; height: 100%; stroke: var(--primary-color); stroke-width: 1.5; fill: none;">
+                    <path class="sine-wave" d="M0,10 Q10,2 20,10 T40,10 T60,10 T80,10 T100,10" style="stroke-dasharray: 100; stroke-dashoffset: 0; animation: move-wave 1.5s linear infinite;"></path>
+                  </svg>
+                </div>
+                <div style="text-align: center; color: var(--primary-color); font-size: 0.75rem; font-family: monospace; letter-spacing: 1px;" class="digital-text-status">VVVF DRIVE: ACTIVE</div>
+              </div>
+            </div>
+            
+            <div class="sim-stats" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Power Efficiency</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: var(--primary-color);"><i class="fas fa-leaf"></i> Up to 40% Savings</div>
+              </div>
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Leveling Precision</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: var(--primary-color);"><i class="fas fa-compress-arrows-alt"></i> &plusmn;5mm (Perfect Level)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Motor -->
+      <div class="sim-content" id="sim-motor" style="display: none;">
+        <div class="sim-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch;">
+          <!-- Left: Old Geared Motor -->
+          <div class="sim-box old-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,0,0,0.15); border-radius: 12px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="sim-badge" style="position: absolute; top: 15px; right: 15px; background: rgba(198,40,40,0.2); color: #ff5252; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">Heavy Geared Induction</div>
+            <div>
+              <h3 style="margin-bottom: 15px; color: #ff5252;"><i class="fas fa-cogs"></i> Old Geared Machine</h3>
+              <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 25px;">Uses worm gears and large gearboxes that require continuous oil lubrication. Produces severe vibrations, oil leaks, high heat, and loud acoustic humming.</p>
+              
+              <!-- Animated Old Motor -->
+              <div class="motor-panel-anim-old" style="background: #111; height: 160px; border-radius: 8px; border: 2px solid #333; position: relative; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: transform 0.05s;">
+                <!-- Spinning heavy gear -->
+                <div class="old-gear-wrapper" style="font-size: 4rem; color: #555; position: relative; display: flex; align-items: center; justify-content: center; animation: spin-old-gear 2s linear infinite paused;">
+                  <i class="fas fa-cog"></i>
+                  <i class="fas fa-cog" style="font-size: 2.2rem; position: absolute; top: 35px; left: 35px; color: #444; animation: spin-old-gear-reverse 2s linear infinite paused;"></i>
+                </div>
+                <!-- Shaking indicator -->
+                <div class="vibration-lines" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: transparent; border: 1px solid rgba(255,82,82,0); transition: border 0.1s;"></div>
+              </div>
+            </div>
+            
+            <div class="sim-stats" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Noise Level</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #ff5252;"><i class="fas fa-volume-high"></i> ~65 dB (Loud)</div>
+              </div>
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Lubrication Required</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #ff5252;"><i class="fas fa-oil-can"></i> Continuous Gear Oil</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: New Gearless Motor -->
+          <div class="sim-box new-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(27,125,58,0.25); border-radius: 12px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="sim-badge" style="position: absolute; top: 15px; right: 15px; background: rgba(27,125,58,0.2); color: var(--primary-color); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">Phoenix Gearless PMSM</div>
+            <div>
+              <h3 style="margin-bottom: 15px; color: var(--primary-color);"><i class="fas fa-circle-check"></i> Gearless PMSM Motor</h3>
+              <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 25px;">Direct-drive Permanent Magnet Synchronous Motor. Features an extremely compact profile, requires absolutely zero gearbox oil, and runs almost fully silent.</p>
+              
+              <!-- Animated New Motor -->
+              <div class="new-motor-wrapper-container" style="width: 100%; display: flex; justify-content: center;">
+                <div class="motor-panel-anim-new" style="background: #111; width: 100%; height: 160px; border-radius: 8px; border: 2px solid var(--primary-color); position: relative; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                  <!-- Spinning sleek wheel -->
+                  <div class="new-motor-wheel" style="width: 80px; height: 80px; border: 6px dashed var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; animation: spin-new-gear 4s linear infinite paused;">
+                    <div style="width: 25px; height: 25px; background: var(--accent-color); border-radius: 50%;"></div>
+                  </div>
+                  <!-- Glowing safe waves -->
+                  <div class="eco-glowing-dots" style="position: absolute; bottom: 10px; display: flex; gap: 5px;">
+                    <div style="width: 6px; height: 6px; background: #00ff00; border-radius: 50%; opacity: 0.7;"></div>
+                    <div style="width: 6px; height: 6px; background: #00ff00; border-radius: 50%; opacity: 0.7;"></div>
+                    <div style="width: 6px; height: 6px; background: #00ff00; border-radius: 50%; opacity: 0.7;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="sim-stats" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Noise Level</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: var(--primary-color);"><i class="fas fa-volume-mute"></i> &lt;38 dB (Silent)</div>
+              </div>
+              <div>
+                <span style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Lubrication Required</span>
+                <div style="font-size: 1.1rem; font-weight: bold; color: var(--primary-color);"><i class="fas fa-circle-check"></i> Zero Oil (Eco-Friendly)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content 3: Cabin & Doors -->
+      <div class="sim-content" id="sim-cabin" style="display: none;">
+        <!-- Slider Before / After Layout -->
+        <div class="slider-wrapper" style="position: relative; width: 100%; height: 380px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1);">
+          <!-- Before Layer (Old Cabin) -->
+          <div class="before-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('images/manual_elevator_gate.png') center/cover no-repeat; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;">
+            <div style="background: rgba(198,40,40,0.85); color: white; padding: 8px 16px; border-radius: 4px; align-self: flex-start; margin-bottom: 10px; font-weight: bold; font-size: 0.9rem;">BEFORE: Legacy Collapsible Gate</div>
+            <p style="max-width: 420px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); color: rgba(255,255,255,0.9); font-size: 0.9rem; line-height: 1.5;">Dangerous manual collapsible mesh gates, poor dim incandescent lighting, loud vibrations, and sudden floor stopping jolts.</p>
+          </div>
+          
+          <!-- After Layer (Modernized Cabin) -->
+          <div class="after-layer" style="position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('images/automatic_door_upgrade.png') center/cover no-repeat; border-left: 4px solid var(--accent-color); overflow: hidden;">
+            <div style="position: absolute; bottom: 25px; right: 25px; display: flex; flex-direction: column; align-items: flex-end; width: 420px;">
+              <div style="background: var(--primary-color); color: white; padding: 8px 16px; border-radius: 4px; margin-bottom: 10px; font-weight: bold; font-size: 0.9rem;">AFTER: Automatic Sliding Door</div>
+              <p style="text-align: right; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); color: rgba(255,255,255,0.9); font-size: 0.9rem; line-height: 1.5;">Modern automatic sliding doors, integrated multi-beam safety light curtains, energy-saving LED ceiling panels, and smooth quiet VVVF travel.</p>
+            </div>
+          </div>
+          
+          <!-- Interactive Slider Handle -->
+          <div class="slider-handle" style="position: absolute; top: 0; left: 50%; width: 40px; height: 100%; margin-left: -20px; cursor: ew-resize; display: flex; align-items: center; justify-content: center; z-index: 10;">
+            <div style="width: 4px; height: 100%; background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color);"></div>
+            <div style="position: absolute; width: 40px; height: 40px; background: var(--accent-color); color: var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-size: 0.8rem; font-weight: bold;">
+              <i class="fas fa-arrows-left-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulation Controller Button -->
+      <div style="text-align: center; margin-top: 40px;" class="sim-btn-wrapper">
+        <button class="btn btn-primary btn-run-simulation" style="background: var(--primary-color); border: none; padding: 14px 40px; border-radius: 30px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: var(--transition);">
+          <i class="fas fa-play"></i> Run Simulation
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Old Elevator Challenges vs Phoenix Solutions -->
+  <section>
+    <div class="section-header">
+      <span class="tag">Problem Solver</span>
+      <h2>Challenges in Old Lifts & Our Solutions</h2>
+      <p>Understanding the risks of legacy elevator shafts and how modern engineering fixes them.</p>
+    </div>
+
+    <div class="comparison-section">
+      <!-- Challenges Column -->
+      <div class="comparison-col challenges">
+        <h3><i class="fas fa-triangle-exclamation"></i> Risks of Outdated Elevators</h3>
+        <div class="comparison-list">
+          <div class="comparison-item">
+            <i class="fas fa-circle-xmark"></i>
+            <div>
+              <h4>Unsafe Manual Collapsible Gates</h4>
+              <p>Passengers, especially children, can accidentally open gates while the lift is in motion, leading to severe crushing hazards.</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <i class="fas fa-circle-xmark"></i>
+            <div>
+              <h4>Uneven Landing & Leveling (Tripping Hazard)</h4>
+              <p>Worn brakes and control relays fail to stop the cabin exactly level with the floor, causing passengers to trip and fall.</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <i class="fas fa-circle-xmark"></i>
+            <div>
+              <h4>Frequent Breakdowns & High Maintenance Costs</h4>
+              <p>Locating rare replacement parts for obsolete controllers leads to prolonged elevator downtime and high emergency repair bills.</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <i class="fas fa-circle-xmark"></i>
+            <div>
+              <h4>High Power Consumption & Noise</h4>
+              <p>Old geared induction motors draw massive starting currents, spiking building energy bills, vibrating rooms, and causing loud hums.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solutions Column -->
+      <div class="comparison-col solutions">
+        <h3><i class="fas fa-circle-check"></i> The Phoenix Modernisation Cure</h3>
+        <div class="comparison-list">
+          <div class="comparison-item">
+            <i class="fas fa-shield-halved"></i>
+            <div>
+              <h4>Automatic Safe Doors & Light Curtains</h4>
+              <p>We install automatic doors with 174-beam infrared light barriers that prevent doors from closing if a person or object is near.</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <i class="fas fa-square-poll-vertical"></i>
+            <div>
+              <h4>VVVF Precision Leveling</h4>
+              <p>Variable frequency control adjusts speed smoothly down to zero, stopping the cabin within +/- 5mm accuracy every time.</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <i class="fas fa-plug-circle-check"></i>
+            <div>
+              <h4>Modern Components with Ready Spares</h4>
+              <p>Our microprocessor panels use standard, modular circuit boards. Diagnostics are instant, and replacement parts are always in stock.</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <i class="fas fa-leaf"></i>
+            <div>
+              <h4>PMSM Gearless Power Savings</h4>
+              <p>Upgrading to a compact gearless motor saves up to 40% on electricity, runs completely silent, and requires zero motor oil lubrication.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner Section -->
+  <section class="cta-banner">
+    <h2>Keep Your Elevators Safe and Efficient</h2>
+    <p>Get in touch with our modernization specialists for a doorstep shaft inspection, physical parameters audit, and customized estimate.</p>
+    <a href="contact.html" class="btn btn-accent">Schedule Doorstep Inspection <i class="fas fa-arrow-right"></i></a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="footer-logo">
+          <img src="phonex_logg.png" alt="Phoenix Elevator Parts Logo">
+        </a>
+        <p>Phoenix Elevator Parts provides safe, efficient, and modern elevator solutions for homes, industries, and commercial buildings with trusted performance and certified components.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="industries.html"><i class="fas fa-chevron-right"></i> Industries Served</a></li>
+          <li><a href="quality-safety.html"><i class="fas fa-chevron-right"></i> Quality & Safety</a></li>
+          <li><a href="services.html"><i class="fas fa-chevron-right"></i> Services</a></li>
+          <li><a href="maintenance.html"><i class="fas fa-chevron-right"></i> Maintenance (AMC)</a></li>
+          <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Our Products</h4>
+        <ul class="footer-links">
+          <li><a href="passenger-elevators.html"><i class="fas fa-chevron-right"></i> Passenger Elevators</a></li>
+          <li><a href="home-lifts.html"><i class="fas fa-chevron-right"></i> Home Lifts</a></li>
+          <li><a href="hospital-elevators.html"><i class="fas fa-chevron-right"></i> Hospital Elevators</a></li>
+          <li><a href="goods-lift.html"><i class="fas fa-chevron-right"></i> Goods Lifts</a></li>
+          <li><a href="hydraulic-lifts.html"><i class="fas fa-chevron-right"></i> Hydraulic Lifts</a></li>
+          <li><a href="capsule-lifts.html"><i class="fas fa-chevron-right"></i> Capsule Lifts</a></li>
+          <li><a href="glass-door-lifts.html"><i class="fas fa-chevron-right"></i> Glass Door Lifts</a></li>
+          <li><a href="modernisation.html"><i class="fas fa-chevron-right"></i> Modernisation</a></li>
+          <li><a href="smart-lifts.html"><i class="fas fa-chevron-right"></i> IoT Smart Lifts</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <ul class="footer-contact-list">
+          <li>
+            <i class="fas fa-phone"></i>
+            <span><a href="tel:+919845181687">+91 98451 81687</a></span>
+          </li>
+          <li>
+            <i class="fas fa-envelope"></i>
+            <span><a href="mailto:phoenixdoorsystem@gmail.com">phoenixdoorsystem@gmail.com</a><br><a href="mailto:info@phoenixelevatorparts.com">info@phoenixelevatorparts.com</a></span>
+          </li>
+          <li>
+            <i class="fas fa-map-marker-alt"></i>
+            <span>NO.4, 3RD MAIN ROAD, HOYSALA NAGAR, NEAR RAILWAY UNDERPASS, HORAMAVU, BANGALORE - 560043</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;">
+      <span>&copy; 2026 Phoenix Elevator Parts. All Rights Reserved.</span>
+      <span style="font-size: 0.85rem; opacity: 0.8;">Developed & Marketed by <a href="https://wa.me/919791409279" target="_blank" rel="noopener noreferrer">Hamerzz Solutions</a></span>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/919845181687" class="floating-wa" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Chat">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Floating Call Button for mobile -->
+  <a href="tel:+919845181687" class="floating-call" aria-label="Call Support">
+    <i class="fas fa-phone"></i>
+  </a>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Handle interactive modernisation simulation tabs
+      const tabBtns = document.querySelectorAll('.sim-tab-btn');
+      const tabContents = document.querySelectorAll('.sim-content');
+      const runSimBtn = document.querySelector('.btn-run-simulation');
+      const simBtnWrapper = document.querySelector('.sim-btn-wrapper');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.style.display = 'none');
+          
+          // Stop any active simulations
+          stopSimulation();
+
+          // Add active to clicked button and related content
+          btn.classList.add('active');
+          const simId = btn.getAttribute('data-sim');
+          const activeContent = document.getElementById('sim-' + simId);
+          activeContent.style.display = 'block';
+
+          // Hide or show simulation control buttons depending on page contents
+          if (simId === 'cabin') {
+            simBtnWrapper.style.display = 'none';
+          } else {
+            simBtnWrapper.style.display = 'block';
+          }
+        });
+      });
+
+      // Simulator animations execution
+      let simInterval = null;
+      let isSimulating = false;
+
+      runSimBtn.addEventListener('click', () => {
+        if (isSimulating) {
+          stopSimulation();
+        } else {
+          startSimulation();
+        }
+      });
+
+      function startSimulation() {
+        isSimulating = true;
+        runSimBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Simulation';
+        runSimBtn.style.background = '#c62828';
+
+        const activeTabBtn = document.querySelector('.sim-tab-btn.active');
+        if (!activeTabBtn) return;
+        const activeTab = activeTabBtn.getAttribute('data-sim');
+
+        if (activeTab === 'controller') {
+          // Start sparks on old panel, blink text status
+          const relayTextStatus = document.querySelector('.relay-text-status');
+          relayTextStatus.textContent = 'CONTACTS SPARKING - PEAK LOAD!';
+          relayTextStatus.style.color = '#ff5252';
+          
+          const relays = document.querySelectorAll('.relay-switch');
+          simInterval = setInterval(() => {
+            relays.forEach(relay => {
+              const isSparking = Math.random() > 0.4;
+              const spark = relay.querySelector('.relay-spark');
+              if (isSparking) {
+                relay.style.background = '#ff5252';
+                spark.style.display = 'block';
+              } else {
+                relay.style.background = '#444';
+                spark.style.display = 'none';
+              }
+            });
+          }, 100);
+        } else if (activeTab === 'motor') {
+          // Start gear animations
+          const oldGear = document.querySelector('.old-gear-wrapper');
+          const newMotor = document.querySelector('.new-motor-wheel');
+          if (oldGear) oldGear.style.animationPlayState = 'running';
+          if (newMotor) newMotor.style.animationPlayState = 'running';
+          
+          // Start shaking old motor container
+          const oldMotorAnim = document.querySelector('.motor-panel-anim-old');
+          const shakeIndicator = document.querySelector('.vibration-lines');
+          if (shakeIndicator) {
+            shakeIndicator.style.border = '2px solid rgba(255, 82, 82, 0.4)';
+          }
+          
+          simInterval = setInterval(() => {
+            if (oldMotorAnim) {
+              const shakeX = (Math.random() - 0.5) * 6;
+              const shakeY = (Math.random() - 0.5) * 6;
+              oldMotorAnim.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+            }
+          }, 50);
+        }
+      }
+
+      function stopSimulation() {
+        isSimulating = false;
+        runSimBtn.innerHTML = '<i class="fas fa-play"></i> Run Simulation';
+        runSimBtn.style.background = 'var(--primary-color)';
+
+        if (simInterval) {
+          clearInterval(simInterval);
+          simInterval = null;
+        }
+
+        // Reset controller styles
+        const relays = document.querySelectorAll('.relay-switch');
+        relays.forEach(relay => {
+          relay.style.background = '#444';
+          const spark = relay.querySelector('.relay-spark');
+          if (spark) spark.style.display = 'none';
+        });
+        const relayTextStatus = document.querySelector('.relay-text-status');
+        if (relayTextStatus) {
+          relayTextStatus.textContent = 'SYSTEM IDLE';
+          relayTextStatus.style.color = '#ff5252';
+        }
+
+        // Reset motor styles
+        const oldGear = document.querySelector('.old-gear-wrapper');
+        const newMotor = document.querySelector('.new-motor-wheel');
+        if (oldGear) oldGear.style.animationPlayState = 'paused';
+        if (newMotor) newMotor.style.animationPlayState = 'paused';
+        
+        const oldMotorAnim = document.querySelector('.motor-panel-anim-old');
+        if (oldMotorAnim) {
+          oldMotorAnim.style.transform = 'translate(0, 0)';
+        }
+        const shakeIndicator = document.querySelector('.vibration-lines');
+        if (shakeIndicator) {
+          shakeIndicator.style.border = '1px solid rgba(255,82,82,0)';
+        }
+      }
+
+      // Before/After Slider Interaction
+      const sliderWrapper = document.querySelector('.slider-wrapper');
+      const afterLayer = document.querySelector('.after-layer');
+      const sliderHandle = document.querySelector('.slider-handle');
+
+      if (sliderWrapper && afterLayer && sliderHandle) {
+        const handleMove = (clientX) => {
+          const rect = sliderWrapper.getBoundingClientRect();
+          const position = clientX - rect.left;
+          let percentage = (position / rect.width) * 100;
+          
+          if (percentage < 0) percentage = 0;
+          if (percentage > 100) percentage = 100;
+
+          afterLayer.style.width = (100 - percentage) + '%';
+          sliderHandle.style.left = percentage + '%';
+        };
+
+        sliderWrapper.addEventListener('mousemove', (e) => {
+          handleMove(e.clientX);
+        });
+
+        sliderWrapper.addEventListener('touchmove', (e) => {
+          if (e.touches && e.touches[0]) {
+            handleMove(e.touches[0].clientX);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
