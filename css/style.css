@@ -117,13 +117,51 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 3%;
+  padding: 10px 3%;
   max-width: 1400px;
   margin: 0 auto;
 }
 
+.logo, .footer-logo {
+  position: relative;
+  display: inline-block;
+}
+
+.logo::after, .footer-logo::after {
+  content: "TM";
+  position: absolute;
+  font-family: 'Inter', sans-serif;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.logo::after {
+  top: 14px;
+  right: -18px;
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  width: 15px;
+  height: 15px;
+}
+
+.footer-logo::after {
+  top: 4px;
+  right: -14px;
+  font-size: 5.5px;
+  font-weight: 800;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  width: 12px;
+  height: 12px;
+}
+
 .logo img {
-  height: 80px;
+  height: 95px;
   width: auto;
   object-fit: contain;
 }
@@ -131,7 +169,7 @@ header {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
 }
 
 .nav-item {
@@ -1000,17 +1038,12 @@ footer {
 
 .footer-logo {
   display: inline-block;
-  background-color: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
   margin-bottom: 20px;
   transition: var(--transition);
 }
 
 .footer-logo:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(27, 125, 58, 0.35);
 }
 
 .footer-logo img {
@@ -1211,6 +1244,10 @@ footer {
     display: flex;
   }
   
+  .logo img {
+    height: 70px;
+  }
+  
   .nav-links {
     position: fixed;
     top: 90px;
@@ -1253,16 +1290,16 @@ footer {
 
 @media (max-width: 1250px) and (min-width: 1025px) {
   .navbar {
-    padding: 15px 2%;
+    padding: 10px 2%;
   }
   .nav-links {
-    gap: 10px;
+    gap: 8px;
   }
   .nav-link {
     font-size: 0.9rem;
   }
   .logo img {
-    height: 50px;
+    height: 75px;
   }
   .nav-cta {
     padding: 8px 12px;
