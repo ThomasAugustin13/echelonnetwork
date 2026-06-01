@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showSlide(index) {
     if (slides.length === 0) return;
-    
+
     slides.forEach(slide => slide.classList.remove('active'));
     dots.forEach(dot => dot.classList.remove('active'));
 
@@ -70,18 +70,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // FAQ Accordion
   const faqQuestions = document.querySelectorAll('.faq-question');
-  
+
   faqQuestions.forEach(question => {
     question.addEventListener('click', () => {
       const item = question.parentElement;
       const isActive = item.classList.contains('active');
-      
+
       // Close all FAQ items
       document.querySelectorAll('.faq-item').forEach(i => {
         i.classList.remove('active');
         i.querySelector('.faq-answer').style.maxHeight = '0';
       });
-      
+
       // If it wasn't active, open it
       if (!isActive) {
         item.classList.add('active');
@@ -91,61 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Form Validation & Submission
-  const contactForm = document.querySelector('.contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const name = contactForm.querySelector('#name').value.trim();
-      const email = contactForm.querySelector('#email').value.trim();
-      const phone = contactForm.querySelector('#phone').value.trim();
-      const interest = contactForm.querySelector('#interest').value;
-      const message = contactForm.querySelector('#message').value.trim();
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      
-      if (!name || !email || !phone || !message) {
-        alert('Please fill out all required fields.');
-        return;
-      }
 
-      // Disable button to prevent double-submits
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending Message...';
-
-      // Send form data via AJAX
-      fetch(contactForm.action, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          phone: phone,
-          interest: interest,
-          message: message
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('Thank you for contacting Phoenix Elevator Parts! The client will receive an activation email first to confirm the inbox, after which your message will arrive.');
-          contactForm.reset();
-        } else {
-          alert('Failed to send message. Please try again later or contact us directly.');
-        }
-      })
-      .catch(error => {
-        console.error('Error submitting form:', error);
-        alert('An error occurred. Please call us directly.');
-      })
-      .finally(() => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Inquiry';
-      });
-    });
-  }
 
   // Elevator Simulator Logic
   const simButtons = document.querySelectorAll('.cop-btn');
@@ -194,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetFloor === currentFloor || isMoving) return;
 
         isMoving = true;
-        
+
         // Deactivate all buttons during travel, activate only the clicked one
         simButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -202,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set direction arrow
         const currentIdx = floorIndex[currentFloor];
         const targetIdx = floorIndex[targetFloor];
-        
+
         if (targetIdx > currentIdx) {
           upArrow.classList.add('active');
           downArrow.classList.remove('active');
@@ -222,21 +168,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const displayInterval = setInterval(() => {
           tempIdx += step;
           floorIndicator.textContent = floorsArray[tempIdx];
-          
+
           if (tempIdx === targetIdx) {
             clearInterval(displayInterval);
-            
+
             // Reached destination!
             setTimeout(() => {
               // Turn off arrows
               upArrow.classList.remove('active');
               downArrow.classList.remove('active');
-              
+
               // Load details with fade-in effect
               const info = floorInfo[targetFloor];
               const infoCard = document.querySelector('.sim-info-card');
               infoCard.style.opacity = '0';
-              
+
               setTimeout(() => {
                 infoTitle.textContent = info.title;
                 infoDesc.textContent = info.desc;
@@ -258,11 +204,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const screenAuth = document.getElementById('screen-auth');
   const screenDispatch = document.getElementById('screen-dispatch');
   const authStatusIcon = document.querySelector('.auth-status-icon');
-  
+
   const dFloorBtns = document.querySelectorAll('.d-floor-btn');
   const btnCallLift = document.getElementById('btn-call-lift');
   const dispatchStatusMsg = document.getElementById('dispatch-status-msg');
-  
+
   const lobbyIndicator = document.getElementById('lobby-indicator');
   const lobbyArrowUp = document.getElementById('lobby-arrow-up');
   const lobbyArrowDown = document.getElementById('lobby-arrow-down');
@@ -279,23 +225,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (fingerprintBtn) {
     fingerprintBtn.addEventListener('click', () => {
       if (isScanning || isAuthorized) return;
-      
+
       isScanning = true;
       fingerprintBtn.classList.add('scanning');
       authMsg.textContent = 'Scanning biometric details...';
       readerLight.className = 'reader-led scanning-orange';
-      
+
       setTimeout(() => {
         fingerprintBtn.classList.remove('scanning');
         isAuthorized = true;
         isScanning = false;
-        
+
         // Show success status
         authStatusIcon.className = 'auth-status-icon active';
         authStatusIcon.innerHTML = '<i class="fas fa-unlock"></i>';
         authMsg.innerHTML = '<span style="color:#2ed573; font-weight:bold;">ACCESS GRANTED</span>';
         readerLight.className = 'reader-led active-green';
-        
+
         // Transition to dispatch screen after 1.2 seconds
         setTimeout(() => {
           screenAuth.classList.remove('active');
@@ -322,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnCallLift) {
     btnCallLift.addEventListener('click', () => {
       if (isLobbyMoving) return;
-      
+
       if (!isAuthorized) {
         // Flash reader red
         readerLight.className = 'reader-led';
@@ -342,10 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Determine target numeric floor
       const targetMap = { 'G': 0, '1': 1, '2': 2, '3': 3 };
       const targetVal = targetMap[selectedDispatchFloor];
-      
+
       // Calculate delay based on distance
       const distance = Math.abs(lobbyCurrentFloor - targetVal);
-      
+
       // Update arrows in lobby panel
       if (targetVal > lobbyCurrentFloor) {
         lobbyArrowUp.classList.add('active');
@@ -366,20 +312,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const moveInterval = setInterval(() => {
         if (tempFloor === targetVal) {
           clearInterval(moveInterval);
-          
+
           // Reached!
           setTimeout(() => {
             lobbyArrowUp.classList.remove('active');
             lobbyArrowDown.classList.remove('active');
-            
+
             // Slide open doors!
             doorSystem.classList.add('open');
-            
+
             btnCallLift.disabled = false;
             btnCallLift.textContent = 'Call Elevator';
             btnCallLift.style.background = 'var(--accent-color)';
             dispatchStatusMsg.textContent = `Arrived at Floor ${selectedDispatchFloor}. Doors opening...`;
-            
+
             isLobbyMoving = false;
             lobbyCurrentFloor = targetVal;
 
@@ -397,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tempFloor += step;
         lobbyCurrentFloor = tempFloor;
-        
+
         // Update display on phone and wall
         lobbyIndicator.textContent = floorsList[tempFloor];
         dispatchStatusMsg.textContent = `Elevator moving... Passing Floor ${floorsList[tempFloor]}`;
@@ -413,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnPower = document.getElementById('btn-saf-power');
   const btnOverload = document.getElementById('btn-saf-overload');
   const btnFull = document.getElementById('btn-saf-full');
-  
+
   const safCab = document.getElementById('safety-cab-element');
   const safGov = document.getElementById('safety-gov-pulley');
   const jawL = document.getElementById('jaw-l');
@@ -424,13 +370,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const irBeam = document.getElementById('ir-beam');
   const doorHand = document.getElementById('door-obs-hand');
   const cabMainLight = document.getElementById('saf-cab-main-light');
-  
+
   // Cabin Indicators
   const iconFire = document.getElementById('icon-cab-fire');
   const iconAlarm = document.getElementById('icon-cab-alarm');
   const lightOverload = document.getElementById('light-cab-overload');
   const lightFull = document.getElementById('light-cab-fullload');
-  
+
   const safTitle = document.getElementById('saf-detail-title');
   const safDesc = document.getElementById('saf-detail-desc');
   const cables = document.querySelectorAll('.cable');
@@ -457,14 +403,14 @@ document.addEventListener('DOMContentLoaded', () => {
       c.style.display = 'block';
       c.style.height = '150px';
     });
-    
+
     // Reset cab lights and indicator elements
     if (cabMainLight) cabMainLight.style.background = '#3498db';
     if (iconFire) iconFire.style.display = 'none';
     if (iconAlarm) iconAlarm.style.display = 'none';
     if (lightOverload) lightOverload.style.display = 'none';
     if (lightFull) lightFull.style.display = 'none';
-    
+
     // Reset buttons styles
     const allButtons = [btnNormal, btnFall, btnDoor, btnFire, btnPower, btnOverload, btnFull];
     allButtons.forEach(btn => {
@@ -482,25 +428,25 @@ document.addEventListener('DOMContentLoaded', () => {
       btnNormal.style.background = '#27ae60';
       btnNormal.style.borderColor = '#27ae60';
     }
-    
+
     safTitle.textContent = 'Normal Running State';
     safDesc.textContent = 'The suspension cables share the cabin load equally. The mechanical speed governor spins at normal speeds. Everything is operating within safe parameters.';
 
     // Animate elevator going up and down slowly
     safCab.style.transition = 'top 3s ease-in-out';
     safGov.style.animation = 'spin-slow 3s infinite linear';
-    
+
     function cycleNormal() {
       if (safState !== 'normal') return;
       safCab.style.top = safCab.style.top === '150px' ? '280px' : '150px';
-      
+
       // Rotate governor based on direction
       if (safCab.style.top === '150px') {
         safGov.style.animation = 'spin-slow 3s infinite linear';
       } else {
         safGov.style.animation = 'spin-slow 3s infinite linear reverse';
       }
-      
+
       normalInterval = setTimeout(cycleNormal, 3200);
     }
     cycleNormal();
@@ -518,10 +464,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (safState === 'falling') return;
       resetSafetyElements();
       safState = 'falling';
-      
+
       btnFall.style.background = '#e74c3c';
       btnFall.style.borderColor = '#e74c3c';
-      
+
       safTitle.textContent = 'Speed Governor & Safety Gears Activated';
       safDesc.textContent = 'Cables snapped! The cabin begins to free-fall. Instantly, the over-speed governor locks up, pulling the safety gear lever. The friction jaws clamp the guide rails, locking the cab securely in place.';
 
@@ -540,16 +486,16 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           // Spin locks
           safGov.style.animation = 'none';
-          
+
           // Clamp Rails (Jaws glow orange/red)
           jawL.style.background = '#e67e22';
           jawL.style.boxShadow = '0 0 15px #e67e22';
           jawR.style.background = '#e67e22';
           jawR.style.boxShadow = '0 0 15px #e67e22';
-          
+
           // Sparks fly
           sparks.style.opacity = '1';
-          
+
           // Shaking impact animation
           safCab.style.transition = 'none';
           safCab.style.transform = 'translateY(-5px)';
@@ -572,10 +518,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btnDoor.addEventListener('click', () => {
       resetSafetyElements();
       safState = 'obstructed';
-      
+
       btnDoor.style.background = '#f39c12';
       btnDoor.style.borderColor = '#f39c12';
-      
+
       safTitle.textContent = 'Infrared Door Safety Curtain';
       safDesc.textContent = 'The doors attempt to close. An obstruction is introduced. The infrared beam is broken, triggering the controller to instantly reverse the doors and open them again.';
 
@@ -584,21 +530,21 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         doorL.classList.add('open-door');
         doorR.classList.add('open-door');
-        
+
         setTimeout(() => {
           doorL.classList.remove('open-door');
           doorR.classList.remove('open-door');
-          
+
           setTimeout(() => {
             doorHand.style.display = 'block';
             irBeam.style.display = 'block';
-            
+
             setTimeout(() => {
               irBeam.style.display = 'none';
               doorL.classList.add('open-door');
               doorR.classList.add('open-door');
               safTitle.textContent = 'Obstruction Detected (Doors Reversed)';
-              
+
               setTimeout(() => {
                 doorHand.style.display = 'none';
                 if (btnDoor) {
@@ -618,13 +564,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFire.addEventListener('click', () => {
       resetSafetyElements();
       safState = 'fire';
-      
+
       btnFire.style.background = '#e74c3c';
       btnFire.style.borderColor = '#e74c3c';
-      
+
       safTitle.textContent = 'Fire Recall Operation Mode';
       safDesc.textContent = 'Recalling to Ground/Evacuation floor. Emergency recall takes priority, overriding all hall landing calls. Upon landing, doors open and remain disabled.';
-      
+
       if (iconFire) iconFire.style.display = 'inline-block';
       if (iconAlarm) iconAlarm.style.display = 'inline-block';
 
@@ -632,14 +578,14 @@ document.addEventListener('DOMContentLoaded', () => {
       safCab.style.transition = 'top 2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
       safGov.style.animation = 'spin-slow 2s infinite linear';
       safCab.style.top = '280px';
-      
+
       setTimeout(() => {
         safGov.style.animation = 'none';
-        
+
         // Open doors and lock them open
         doorL.classList.add('open-door');
         doorR.classList.add('open-door');
-        
+
         safTitle.textContent = 'Evacuation Floor Arrived (Safe)';
       }, 2100);
     });
@@ -650,13 +596,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPower.addEventListener('click', () => {
       resetSafetyElements();
       safState = 'power';
-      
+
       btnPower.style.background = '#e67e22';
       btnPower.style.borderColor = '#e67e22';
-      
+
       safTitle.textContent = 'Power Failure & ARD Activation';
       safDesc.textContent = 'Simulating power outage. The main cabin lights turn off. The Automatic Rescue Device (ARD) engages backup battery power, running the lift slowly to the nearest floor to release passengers.';
-      
+
       // Blackout: dim main lights
       if (cabMainLight) cabMainLight.style.background = '#111';
       if (iconAlarm) {
@@ -671,11 +617,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         safGov.style.animation = 'none';
-        
+
         // Backup power slides doors open
         doorL.classList.add('open-door');
         doorR.classList.add('open-door');
-        
+
         safTitle.textContent = 'ARD Evacuation Complete';
         safDesc.textContent = 'Emergency backup system successfully brought the elevator to Floor 1 and opened doors. Passengers safely evacuated.';
       }, 2700);
@@ -687,20 +633,20 @@ document.addEventListener('DOMContentLoaded', () => {
     btnOverload.addEventListener('click', () => {
       resetSafetyElements();
       safState = 'overload';
-      
+
       btnOverload.style.background = '#e74c3c';
       btnOverload.style.borderColor = '#e74c3c';
-      
+
       safTitle.textContent = 'Overload Sensor Protection';
       safDesc.textContent = 'Elevator load sensors detect weight exceeding 100% capacity limit. The doors remain open, an audible alarm triggers, and operations are suspended until weight is reduced.';
-      
+
       if (lightOverload) lightOverload.style.display = 'inline-block';
       if (iconAlarm) iconAlarm.style.display = 'inline-block';
-      
+
       // Slide doors open
       doorL.classList.add('open-door');
       doorR.classList.add('open-door');
-      
+
       // Cabin stays completely stationary at 150px
       safCab.style.top = '150px';
     });
@@ -711,25 +657,25 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFull.addEventListener('click', () => {
       resetSafetyElements();
       safState = 'full';
-      
+
       btnFull.style.background = '#27ae60';
       btnFull.style.borderColor = '#27ae60';
-      
+
       safTitle.textContent = 'Full Load Bypass (Express Run)';
       safDesc.textContent = 'Elevator weight registers at 80%+ capacity. The controller switches the cab to Express bypass mode, ignoring all landing hall calls and traveling directly to inside passenger destinations.';
-      
+
       if (lightFull) lightFull.style.display = 'inline-block';
 
       // Express run up and down
       safCab.style.transition = 'top 1.5s ease-in-out';
       safGov.style.animation = 'spin-slow 1.5s infinite linear';
       safCab.style.top = '280px';
-      
+
       setTimeout(() => {
         if (safState !== 'full') return;
         safGov.style.animation = 'spin-slow 1.5s infinite linear reverse';
         safCab.style.top = '150px';
-        
+
         setTimeout(() => {
           if (safState !== 'full') return;
           safGov.style.animation = 'none';
